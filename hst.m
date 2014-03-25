@@ -1,3 +1,5 @@
+n_points = 1;
+
 o = csvread('hstcoord.csv');
 o( ~any(o,2), : ) = [];
 t = delaunay(o(:, 1), o(:, 2));
@@ -13,11 +15,16 @@ boundary = [boundarydata(1:840, :); boundarydata(26935:28690, :); boundarydata(8
 figure; hold on;
 triplot(t, o(:, 1), o(:, 2));
 plot(boundarychx, boundarychy, 'g');
-for i = 1:1000
+n = 1;
+for i = 1:size(CC, 1)
     in = sortidx(i);
     if inpolygon(CC(in, 1), CC(in, 2), boundarychx, boundarychy)
         plot(CC(in, 1), CC(in, 2), 'r*');
-        disp(['x = ' int2str(CC(in, 1)) ', y = ' int2str(CC(in, 2))]);
-        break;
+        disp(['x = ' num2str(CC(in, 1)) ', y = ' num2str(CC(in, 2))]);
+        n = n + 1;
+        if n > n_points
+            break;
+        end
     end
 end
+
